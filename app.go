@@ -72,9 +72,10 @@ func (a *App) ExportExcel(companies []CompanyExport, statementHeaders []string, 
 		Font:      &excelize.Font{Bold: true, Color: "F0A500", Size: 13},
 		Alignment: &excelize.Alignment{Horizontal: "left"},
 	})
+	numFmt := "#,##0.00"
 	numStyle, _ := f.NewStyle(&excelize.Style{
-		NumFmt:    3, // #,##0
-		Alignment: &excelize.Alignment{Horizontal: "right"},
+		CustomNumFmt: &numFmt,
+		Alignment:    &excelize.Alignment{Horizontal: "right"},
 	})
 	pctStyle, _ := f.NewStyle(&excelize.Style{
 		NumFmt:    10, // 0.00%
