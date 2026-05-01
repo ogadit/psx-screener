@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square" alt="Platform"/>
 </p>
 
-Anyone who has tried to do serious financial analysis on Pakistani equities knows the problem: there is "Screener" for PSX, no clean API, and the official exchange website is not built for research. You end up copying numbers out of PDFs, switching between scattered websites, and spending more time gathering data than actually analysing it.
+Anyone who has tried to do serious financial analysis on Pakistani equities knows the problem: there is no "Screener" for PSX, no clean API, and the official exchange website is not built for research. You end up copying numbers out of PDFs, switching between scattered websites, and spending more time gathering data than actually analysing it.
 
 I built PSX Screener to fix that for my own workflow. It pulls income statements, balance sheets, and financial ratios for any PSX-listed company into a single clean view — the kind of tool I wished existed before I had to build it myself.
 
