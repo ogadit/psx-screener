@@ -20,6 +20,8 @@ func main() {
 		Title:            "PSX Screener",
 		Width:            1280,
 		Height:           800,
+		MinWidth:         900,
+		MinHeight:        600,
 		WindowStartState: options.Maximised,
 		AssetServer: &assetserver.Options{
 			Assets: assets,

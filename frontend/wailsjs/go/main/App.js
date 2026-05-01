@@ -14,6 +14,6 @@ export function SaveCSV(arg1, arg2) {
   return window['go']['main']['App']['SaveCSV'](arg1, arg2);
 }
 
-export function OpenInExcel(arg1) {
-  return window['go']['main']['App']['OpenInExcel'](arg1);
+export function ExportExcel(arg1, arg2, arg3) {
+  return window['go']['main']['App']['ExportExcel'](arg1, arg2, arg3);
 }

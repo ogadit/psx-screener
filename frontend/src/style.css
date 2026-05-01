@@ -32,6 +32,7 @@ html, body {
   line-height: 1.5;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* ── Custom scrollbar ── */
@@ -51,9 +52,9 @@ html, body {
 }
 
 #app {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 0 40px 40px;
+  width: 100%;
+  min-width: 0;
+  padding: 0 32px 40px;
 }
 
 /* ── Header bar (sticky) ── */
@@ -273,6 +274,12 @@ html, body {
   border: 1px solid var(--border);
   border-radius: 4px;
   overflow: hidden;
+  min-width: 0;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  width: 100%;
 }
 
 .fin-table-title {
@@ -334,11 +341,20 @@ tbody td {
   user-select: text;
 }
 
-tbody td:first-child {
+tbody td:first-child,
+td.row-label {
   text-align: left;
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: 13px;
+  position: sticky;
+  left: 0;
+  background: var(--bg);
+  z-index: 1;
+}
+
+tbody tr:hover td.row-label {
+  background: var(--bg-hover);
 }
 
 tbody td.na {

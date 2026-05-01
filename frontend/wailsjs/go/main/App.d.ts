@@ -3,6 +3,9 @@
 import {scraper} from '../models';
 
 export function GetData(arg1:string):Promise<scraper.FinancialData>;
+
 export function GetPlatform():Promise<string>;
-export function SaveCSV(arg1:string, arg2:string):Promise<void>;
-export function OpenInExcel(arg1:string):Promise<void>;
+
+export function SaveCSV(arg1:string,arg2:string):Promise<void>;
+
+export function ExportExcel(arg1:Array<{ticker:string,data:scraper.FinancialData}>,arg2:string[],arg3:string[]):Promise<void>;

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { GetData, SaveCSV, OpenInExcel, GetPlatform } from '../wailsjs/go/main/App'
+import { GetData, SaveCSV, ExportExcel, GetPlatform } from '../wailsjs/go/main/App'
 import FinancialTable from './components/FinancialTable.vue'
 
 const tickerInput = ref('')
@@ -14,6 +14,7 @@ const statementHeaders = ['TTM', 'FY 2025', 'FY 2024', 'FY 2023', 'FY 2022', 'FY
 const ratioHeaders = ['Current', 'FY 2025', 'FY 2024', 'FY 2023', 'FY 2022', 'FY 2021']
 
 const current = computed(() => results.value.find(r => r.ticker === selectedTicker.value) ?? null)
+const loaded = computed(() => results.value.filter(r => r.data))
 
 onMounted(async () => {
   inputRef.value?.focus()
@@ -45,38 +46,44 @@ async function fetchAll() {
   loading.value = false
 }
 
-function buildCSV(data) {
-  const sections = [
-    { title: 'Income Statement', items: data.incomeStatement, headers: statementHeaders },
-    { title: 'Balance Sheet',    items: data.balanceSheet,    headers: statementHeaders },
-    { title: 'Ratios',           items: data.ratios,          headers: ratioHeaders },
-  ]
-  const lines = [`${data.companyName} — Financial Data (PKR Millions)`]
-  for (const s of sections) {
-    lines.push('', s.title)
-    lines.push(['Metric', ...s.headers].join(','))
-    for (const item of s.items) {
-      const vals = s.headers.map(h => {
-        const v = item.values?.[h]
-        return v === undefined || v === null ? '' : item.isPercent ? v.toFixed(2) + '%' : v
-      })
-      lines.push([`"${item.label}"`, ...vals].join(','))
+function buildCSV(companies) {
+  const lines = []
+  for (const { ticker, data } of companies) {
+    lines.push(`${data.companyName} (${ticker})  —  PKR ${data.currentPrice.toLocaleString()}  |  Figures in PKR Millions`)
+    const sections = [
+      { title: 'Income Statement', items: data.incomeStatement, headers: statementHeaders },
+      { title: 'Balance Sheet',    items: data.balanceSheet,    headers: statementHeaders },
+      { title: 'Ratios',           items: data.ratios,          headers: ratioHeaders },
+    ]
+    for (const s of sections) {
+      lines.push('', s.title)
+      lines.push(['Metric', ...s.headers].join(','))
+      for (const item of s.items) {
+        const vals = s.headers.map(h => {
+          const v = item.values?.[h]
+          return v === undefined || v === null ? '' : item.isPercent ? (v / 100).toFixed(4) : v
+        })
+        lines.push([`"${item.label}"`, ...vals].join(','))
+      }
     }
+    lines.push('', '')
   }
   return lines.join('\n')
 }
 
 async function downloadCSV() {
-  if (!current.value?.data) return
-  const content = buildCSV(current.value.data)
-  const filename = `${current.value.ticker}.csv`
+  if (!loaded.value.length) return
+  const content = buildCSV(loaded.value)
+  const filename = loaded.value.length === 1
+    ? `${loaded.value[0].ticker}.csv`
+    : 'psx-screener-export.csv'
   await SaveCSV(filename, content)
 }
 
 async function openInExcel() {
-  if (!current.value?.data) return
-  const content = buildCSV(current.value.data)
-  await OpenInExcel(content)
+  if (!loaded.value.length) return
+  const companies = loaded.value.map(r => ({ ticker: r.ticker, data: r.data }))
+  await ExportExcel(companies, statementHeaders, ratioHeaders)
 }
 </script>
 
@@ -90,7 +97,7 @@ async function openInExcel() {
           {{ loading ? 'Fetching...' : 'Fetch' }}
         </button>
       </div>
-      <div v-if="current?.data" class="export-bar">
+      <div v-if="loaded.length" class="export-bar">
         <button class="btn-export" @click="downloadCSV">Download CSV</button>
         <button
           class="btn-export"
