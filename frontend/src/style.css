@@ -148,6 +148,14 @@ html, body {
   letter-spacing: 0.08em;
 }
 
+.company-unit {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-left: auto;
+  align-self: center;
+}
+
 /* ── Stock selector dropdown ── */
 .stock-selector {
   margin-bottom: 24px;

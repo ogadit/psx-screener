@@ -73,6 +73,7 @@ async function fetchAll() {
           <span class="company-name">{{ current.data.companyName }}</span>
           <span class="company-currency">PKR</span>
           <span class="company-price">{{ current.data.currentPrice.toLocaleString() }}</span>
+          <span class="company-unit">Figures in PKR Millions</span>
         </div>
         <div class="tables-grid">
           <FinancialTable title="Income Statement" :items="current.data.incomeStatement" :headers="statementHeaders" />
