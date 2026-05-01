@@ -5,3 +5,15 @@
 export function GetData(arg1) {
   return window['go']['main']['App']['GetData'](arg1);
 }
+
+export function GetPlatform() {
+  return window['go']['main']['App']['GetPlatform']();
+}
+
+export function SaveCSV(arg1, arg2) {
+  return window['go']['main']['App']['SaveCSV'](arg1, arg2);
+}
+
+export function OpenInExcel(arg1) {
+  return window['go']['main']['App']['OpenInExcel'](arg1);
+}

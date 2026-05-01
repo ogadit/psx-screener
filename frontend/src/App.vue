@@ -1,20 +1,24 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { GetData } from '../wailsjs/go/main/App'
+import { GetData, SaveCSV, OpenInExcel, GetPlatform } from '../wailsjs/go/main/App'
 import FinancialTable from './components/FinancialTable.vue'
 
 const tickerInput = ref('')
-const results = ref([])   // [{ ticker, data, error }]
+const results = ref([])
 const selectedTicker = ref('')
 const loading = ref(false)
 const inputRef = ref(null)
+const isWindows = ref(false)
 
 const statementHeaders = ['TTM', 'FY 2025', 'FY 2024', 'FY 2023', 'FY 2022', 'FY 2021']
 const ratioHeaders = ['Current', 'FY 2025', 'FY 2024', 'FY 2023', 'FY 2022', 'FY 2021']
 
 const current = computed(() => results.value.find(r => r.ticker === selectedTicker.value) ?? null)
 
-onMounted(() => inputRef.value?.focus())
+onMounted(async () => {
+  inputRef.value?.focus()
+  isWindows.value = (await GetPlatform()) === 'windows'
+})
 
 async function fetchAll() {
   const tickers = [...new Set(
@@ -38,8 +42,41 @@ async function fetchAll() {
 
   const first = results.value.find(r => r.data)
   selectedTicker.value = (first ?? results.value[0]).ticker
-
   loading.value = false
+}
+
+function buildCSV(data) {
+  const sections = [
+    { title: 'Income Statement', items: data.incomeStatement, headers: statementHeaders },
+    { title: 'Balance Sheet',    items: data.balanceSheet,    headers: statementHeaders },
+    { title: 'Ratios',           items: data.ratios,          headers: ratioHeaders },
+  ]
+  const lines = [`${data.companyName} — Financial Data (PKR Millions)`]
+  for (const s of sections) {
+    lines.push('', s.title)
+    lines.push(['Metric', ...s.headers].join(','))
+    for (const item of s.items) {
+      const vals = s.headers.map(h => {
+        const v = item.values?.[h]
+        return v === undefined || v === null ? '' : item.isPercent ? v.toFixed(2) + '%' : v
+      })
+      lines.push([`"${item.label}"`, ...vals].join(','))
+    }
+  }
+  return lines.join('\n')
+}
+
+async function downloadCSV() {
+  if (!current.value?.data) return
+  const content = buildCSV(current.value.data)
+  const filename = `${current.value.ticker}.csv`
+  await SaveCSV(filename, content)
+}
+
+async function openInExcel() {
+  if (!current.value?.data) return
+  const content = buildCSV(current.value.data)
+  await OpenInExcel(content)
 }
 </script>
 
@@ -52,6 +89,16 @@ async function fetchAll() {
         <button @click="fetchAll" :disabled="loading">
           {{ loading ? 'Fetching...' : 'Fetch' }}
         </button>
+      </div>
+      <div v-if="current?.data" class="export-bar">
+        <button class="btn-export" @click="downloadCSV">Download CSV</button>
+        <button
+          class="btn-export"
+          :class="{ disabled: !isWindows }"
+          :disabled="!isWindows"
+          :title="isWindows ? 'Open in Excel' : 'Excel not available on Linux'"
+          @click="openInExcel"
+        >Open in Excel</button>
       </div>
     </div>
 

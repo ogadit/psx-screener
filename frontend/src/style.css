@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+/* Fonts loaded via @fontsource-variable in main.js */
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -20,8 +20,8 @@
   --text:       #e6edf3;
   --text-muted: #8b949e;
   --text-dim:   #484f58;
-  --font-mono:  'JetBrains Mono', monospace;
-  --font-sans:  'Inter', sans-serif;
+  --font-mono:  'JetBrains Mono Variable', 'JetBrains Mono', monospace;
+  --font-sans:  'Inter Variable', 'Inter', sans-serif;
 }
 
 html, body {
@@ -34,18 +34,38 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #2d3139;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dim);
+}
+
 #app {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 28px 40px;
+  padding: 0 40px 40px;
 }
 
-/* ── Header bar ── */
+/* ── Header bar (sticky) ── */
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
   display: flex;
   align-items: center;
   gap: 16px;
-  padding-bottom: 20px;
+  padding: 20px 0;
   border-bottom: 1px solid var(--border);
   margin-bottom: 28px;
 }
@@ -59,6 +79,7 @@ html, body {
   text-transform: uppercase;
   border: 1px solid var(--accent-dim);
   padding: 5px 10px;
+  white-space: nowrap;
 }
 
 /* ── Search bar ── */
@@ -76,7 +97,7 @@ html, body {
   font-family: var(--font-mono);
   font-size: 14px;
   padding: 9px 14px;
-  width: 200px;
+  width: 240px;
   outline: none;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -115,6 +136,65 @@ html, body {
   background: var(--accent-dim);
   color: #666;
   cursor: not-allowed;
+}
+
+/* ── Export buttons ── */
+.export-bar {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.btn-export {
+  background: transparent;
+  border: 1px solid var(--border-lit);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.btn-export:hover:not(:disabled):not(.disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-export:disabled,
+.btn-export.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── Stock selector dropdown ── */
+.stock-selector {
+  margin-bottom: 24px;
+}
+
+.stock-selector select {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-lit);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 9px 36px 9px 14px;
+  outline: none;
+  cursor: pointer;
+  min-width: 300px;
+  transition: border-color 0.15s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238b949e' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.stock-selector select:focus {
+  border-color: var(--accent);
 }
 
 /* ── Company info ── */
@@ -156,33 +236,6 @@ html, body {
   align-self: center;
 }
 
-/* ── Stock selector dropdown ── */
-.stock-selector {
-  margin-bottom: 24px;
-}
-
-.stock-selector select {
-  background: var(--bg-panel);
-  border: 1px solid var(--border-lit);
-  color: var(--text);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  padding: 9px 14px;
-  outline: none;
-  cursor: pointer;
-  min-width: 300px;
-  transition: border-color 0.15s;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238b949e' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
-}
-
-.stock-selector select:focus {
-  border-color: var(--accent);
-}
-
 /* ── Status messages ── */
 .status-loading {
   font-family: var(--font-mono);
@@ -191,6 +244,7 @@ html, body {
   color: var(--accent);
   text-transform: uppercase;
   animation: blink 1s step-end infinite;
+  padding-top: 12px;
 }
 
 @keyframes blink {
@@ -205,6 +259,7 @@ html, body {
   padding: 10px 14px;
   border: 1px solid var(--red);
   display: inline-block;
+  margin-bottom: 16px;
 }
 
 /* ── Financial tables ── */
@@ -276,6 +331,7 @@ tbody td {
   color: var(--text);
   padding: 9px 16px;
   text-align: right;
+  user-select: text;
 }
 
 tbody td:first-child {
@@ -287,4 +343,50 @@ tbody td:first-child {
 
 tbody td.na {
   color: var(--text-dim);
+}
+
+/* ── Context menu ── */
+.ctx-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+}
+
+.ctx-menu {
+  position: fixed;
+  z-index: 201;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-lit);
+  border-radius: 4px;
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.ctx-value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  padding: 7px 14px 5px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.04em;
+}
+
+.ctx-item {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  padding: 9px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.ctx-item:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
 }
