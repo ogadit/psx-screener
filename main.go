@@ -17,7 +17,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:            "PSX Stock Screener",
+		Title:            "PSX Screener",
 		Width:            1280,
 		Height:           800,
 		WindowStartState: options.Maximised,

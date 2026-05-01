@@ -1,9 +1,15 @@
-# PSX Screener
+<p align="center">
+  <img src=".github/icon.png" width="120" height="120" alt="PSX Screener"/>
+</p>
 
-![Wails](https://img.shields.io/badge/Wails-v2-red?style=flat-square&logo=go)
-![Go](https://img.shields.io/badge/Go-1.25-00ADD8?style=flat-square&logo=go&logoColor=white)
-![Vue](https://img.shields.io/badge/Vue-3-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square)
+<h1 align="center">PSX Screener</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Wails-v2-red?style=flat-square&logo=go" alt="Wails"/>
+  <img src="https://img.shields.io/badge/Go-1.25-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go"/>
+  <img src="https://img.shields.io/badge/Vue-3-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white" alt="Vue"/>
+  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square" alt="Platform"/>
+</p>
 
 Anyone who has tried to do serious financial analysis on Pakistani equities knows the problem: there is "Screener" for PSX, no clean API, and the official exchange website is not built for research. You end up copying numbers out of PDFs, switching between scattered websites, and spending more time gathering data than actually analysing it.
 
